@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 env:
-    AZURE_RESOURCEGROUP_NAME: Default-Web-AustraliaSoutheast
+    AZURE_RESOURCEGROUP_NAME: TwitterFinder
   
 jobs:
   lint: 

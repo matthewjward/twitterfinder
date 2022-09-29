@@ -24,6 +24,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' existing = {
   name: appServicePlanName
+  scope: resourceGroup('Default-Web-AustraliaSoutheast')
 }
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
