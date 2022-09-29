@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 env:
-    AZURE_RESOURCEGROUP_NAME: Bicep
+    AZURE_RESOURCEGROUP_NAME: Default-Web-AustraliaSoutheast
   
 jobs:
   lint: 
