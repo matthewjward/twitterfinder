@@ -19,7 +19,7 @@ param twitterToken string
 var storageName = toLower(functionAppName)
 
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
-  name: cosmosName
+  name: toLower(cosmosName)
   location: location
   kind: 'GlobalDocumentDB'
   properties: {
@@ -43,7 +43,8 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
 }
 
 resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15' = {
-  name: '${cosmos.name}/${databaseName}'
+  parent: cosmos
+  name: databaseName
   properties: {
     resource: {
       id: databaseName
@@ -52,7 +53,8 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
 }
 
 resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2022-05-15' = {
-  name: '${database.name}/${containerName}'
+  parent: database
+  name: containerName
   properties: {
     resource: {
       id: containerName
