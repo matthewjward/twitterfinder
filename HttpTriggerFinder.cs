@@ -14,15 +14,6 @@ using Newtonsoft.Json.Linq;
 
 namespace My.Funtions
 {
-    public class UserItem
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-        
-        [JsonProperty("friends")]
-        public List<string> Friends { get; set; }
-    }
-
     public static class HttpTriggerFinder
     {
         [FunctionName("HttpTriggerFinder")]
