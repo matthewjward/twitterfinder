@@ -34,7 +34,7 @@ jobs:
       with:
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
         template: ./deploy/main.bicep
-        parameters: ./deploy/main-params.json
+        parameters: ./deploy/main-params.json twitterToken=${{ secrets.TWITTER_TOKEN }} cosmosDBConnection=${{ secrets.COSMOS_DB_CONNECTION }}
         deploymentMode: Validate
   preview:
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
         failOnStdErr: false
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
         template: deploy/main.bicep
-        parameters: ./deploy/main-params.json       
+        parameters: ./deploy/main-params.json twitterToken=${{ secrets.TWITTER_TOKEN }} cosmosDBConnection=${{ secrets.COSMOS_DB_CONNECTION }}       
         additionalArguments: --what-if
   deploy:
     runs-on: ubuntu-latest
@@ -71,7 +71,28 @@ jobs:
         deploymentName: ${{ github.run_number }}
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
         template: ./deploy/main.bicep
-        parameters: ./deploy/main-params.json
+        parameters: ./deploy/main-params.json twitterToken=${{ secrets.TWITTER_TOKEN }} cosmosDBConnection=${{ secrets.COSMOS_DB_CONNECTION }}
+  build-and-deploy-code:
+    runs-on: windows-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+
+    - name: Setup DotNet 2.2.402 Environment
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.402
+
+    - name: 'Resolve Project Dependencies Using Dotnet'
+      shell: pwsh
+      run: |
+        dotnet build --configuration Release --output ./output
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: TwitterFinder
+        package: 'output'
         
         
      

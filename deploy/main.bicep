@@ -7,6 +7,12 @@ param appServicePlanName string
 
 param functionAppName string
 
+@secure()
+param twitterToken string
+
+@secure()
+param cosmosDBConnection string
+
 var storageName = toLower(functionAppName)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
@@ -64,6 +70,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'TwitterToken'
+          value: twitterToken
+        }
+        {
+          name: 'CosmosDBConnection'
+          value: cosmosDBConnection
         }
       ]
       ftpsState: 'FtpsOnly'
