@@ -10,6 +10,15 @@
         },
         "functionAppName": {
             "value": "TwitterFinder"
+        },
+        "cosmosName": {
+            "value": "TwitterFinder"
+        },
+        "databaseName": {
+            "value": "TwitterFinder"
+        },
+        "containerName": {
+            "value": "TwitterFinder"
         }
     }
 }

@@ -7,13 +7,66 @@ param appServicePlanName string
 
 param functionAppName string
 
+param cosmosName string
+
+param databaseName string
+
+param containerName string
+
 @secure()
 param twitterToken string
 
-@secure()
-param cosmosDBConnection string
-
 var storageName = toLower(functionAppName)
+
+resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
+  name: cosmosName
+  location: location
+  kind: 'GlobalDocumentDB'
+  properties: {
+    consistencyPolicy: {
+      defaultConsistencyLevel: 'Session'
+    }
+    locations: [
+      {
+        locationName: location
+        failoverPriority: 0
+        isZoneRedundant: false
+      }
+    ]
+    capabilities: [
+      {
+        name: 'EnableServerless'
+      }
+    ]
+    databaseAccountOfferType: 'Standard'
+  }
+}
+
+resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15' = {
+  name: '${cosmos.name}/${databaseName}'
+  properties: {
+    resource: {
+      id: databaseName
+    }
+  }
+}
+
+resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2022-05-15' = {
+  name: '${database.name}/${containerName}'
+  properties: {
+    resource: {
+      id: containerName
+      partitionKey: {
+        paths: [
+          '/id'
+        ]
+      }
+    }
+  }
+}
+
+var cosmosConnectionString = listKeys(database.name, database.apiVersion).primaryMasterKey
+
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   sku: {
@@ -72,12 +125,20 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: 'dotnet'
         }
         {
-          name: 'TwitterToken'
+          name: 'TWITTER_TOKEN'
           value: twitterToken
         }
         {
-          name: 'CosmosDBConnection'
-          value: cosmosDBConnection
+          name: 'COSMOS_DB_CONNECTION'
+          value: cosmosConnectionString
+        }
+        {
+          name: 'COSMOS_CONTAINER'
+          value: containerName
+        }
+        {
+          name: 'COSMOS_DATABASE'
+          value: databaseName
         }
       ]
       ftpsState: 'FtpsOnly'

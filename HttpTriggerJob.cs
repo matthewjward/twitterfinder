@@ -38,19 +38,19 @@ namespace My.Funtions
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection",
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION",
                 Id = "mattyjward")] UserItem seedItem,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection",
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION",
                 Id = "index")] IndexItem indexItem,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<dynamic> itemsOut,
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION")] IAsyncCollector<dynamic> itemsOut,
             ILogger log)
         {
             const int itemsToProcess = 1;

@@ -28,8 +28,8 @@ namespace My.Funtions
         [FunctionName("HttpTriggerFinder")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            [CosmosDB("ToDoList", "Items",
-                ConnectionStringSetting = "CosmosDBConnection",
+            [CosmosDB("%COSMOS_DATABASE%", "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION",
                 SqlQuery = "select * from r where r.id != 'index' AND IS_NULL(r.friends) = false")]
                 IEnumerable<UserItem> items,
             ILogger log)

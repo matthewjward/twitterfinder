@@ -21,13 +21,13 @@ namespace My.Funtions
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<dynamic> itemsOut,
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION")] IAsyncCollector<dynamic> itemsOut,
             ILogger log)
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("TwitterToken")}");
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("TWITTER_TOKEN")}");
             var response = client.GetAsync($"https://api.twitter.com/1.1/friends/ids.json?screen_name=mattyjward").Result.Content.ReadAsStringAsync().Result;
             var friends = JObject.Parse(response)["ids"];
             

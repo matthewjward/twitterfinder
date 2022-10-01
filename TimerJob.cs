@@ -24,7 +24,7 @@ namespace My.Funtions
         public List<string> Friends { get; set; }
     }
 
-        public class IndexItem
+    public class IndexItem
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -39,19 +39,19 @@ namespace My.Funtions
         public static void Run(
             [TimerTrigger("0 */20 * * * *")]TimerInfo myTimer,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection",
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION",
                 Id = "mattyjward")] UserItem seedItem,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection",
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION",
                 Id = "index")] IndexItem indexItem,
             [CosmosDB(
-                databaseName: "ToDoList",
-                collectionName: "Items",
-                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<dynamic> itemsOut,
+                databaseName: "%COSMOS_DATABASE%",
+                collectionName: "%COSMOS_CONTAINER%",
+                ConnectionStringSetting = "COSMOS_DB_CONNECTION")] IAsyncCollector<dynamic> itemsOut,
             ILogger log)
         {
             const int itemsToProcess = 15;
@@ -59,7 +59,7 @@ namespace My.Funtions
             var index = indexItem?.Value ?? 0; 
             
             HttpClient client = new HttpClient();  
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("TwitterToken")}");
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetEnvironmentVariable("TWITTER_TOKEN")}");
 
             var itemsProcessed = 0;
             while(itemsProcessed < itemsToProcess){
