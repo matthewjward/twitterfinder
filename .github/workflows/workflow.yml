@@ -74,6 +74,7 @@ jobs:
         parameters: ./deploy/main-params.json twitterToken=${{ secrets.TWITTER_TOKEN }} 
   build-and-deploy-code:
     runs-on: windows-latest
+    needs: deploy
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master

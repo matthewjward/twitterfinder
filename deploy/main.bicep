@@ -65,7 +65,7 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
   }
 }
 
-var cosmosConnectionString = listKeys(database.name, database.apiVersion).primaryMasterKey
+var cosmosConnectionString = listConnectionStrings(database.id, database.apiVersion).connectionStrings[0].connectionString
 
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
