@@ -58,11 +58,11 @@ resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
   properties: {
     resource: {
       id: containerName
-/*       partitionKey: {
+      partitionKey: {
         paths: [
           '/id'
         ]
-      } */
+      }
     }
   }
 }

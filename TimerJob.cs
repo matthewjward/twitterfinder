@@ -24,12 +24,14 @@ namespace My.Funtions
                 databaseName: "%COSMOS_DATABASE%",
                 collectionName: "%COSMOS_CONTAINER%",
                 ConnectionStringSetting = "COSMOS_DB_CONNECTION",
-                Id = "mattyjward")] UserItem seedItem,
+                Id = "mattyjward",
+                PartitionKey = "mattyjward")] UserItem seedItem,
             [CosmosDB(
                 databaseName: "%COSMOS_DATABASE%",
                 collectionName: "%COSMOS_CONTAINER%",
                 ConnectionStringSetting = "COSMOS_DB_CONNECTION",
-                Id = "index")] IndexItem indexItem,
+                Id = "index",
+                PartitionKey = "index")] IndexItem indexItem,
             [CosmosDB(
                 databaseName: "%COSMOS_DATABASE%",
                 collectionName: "%COSMOS_CONTAINER%",
