@@ -83,6 +83,17 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 }
 
+resource appInsights 'microsoft.insights/components@2015-05-01' = {
+  name: projectName
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    Request_Source: 'rest'
+  }
+}
+
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' existing = {
   name: appServicePlanName
   scope: resourceGroup('Default-Web-AustraliaSoutheast')
@@ -125,6 +136,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: reference('microsoft.insights/components/${appInsights.name}', '2015-05-01').InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: reference('microsoft.insights/components/${appInsights.name}', '2015-05-01').ConnectionString
         }
         {
           name: 'TWITTER_TOKEN'
